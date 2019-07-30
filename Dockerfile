@@ -5,13 +5,10 @@ ENV ENVIRONMENT ${ENVIRONMENT:-production}
 ENV DEBIAN_FRONTEND noninteractive 
 ENV TZ=Europe/Berlin
 ENV TERM xterm
-RUN apt-get update && apt-get -y install wget lsb-release apt-transport-https
+RUN apt-get update && apt-get -y install wget lsb-release apt-transport-https openssl
 RUN wget -q https://repo.vapor.codes/apt/keyring.gpg -O- | apt-key add -
 RUN echo "deb https://repo.vapor.codes/apt $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/vapor.list
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-# install openssl
-RUN apt-get -y install openssl
 
 USER root
 

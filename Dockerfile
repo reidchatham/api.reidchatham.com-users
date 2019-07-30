@@ -10,6 +10,9 @@ RUN wget -q https://repo.vapor.codes/apt/keyring.gpg -O- | apt-key add -
 RUN echo "deb https://repo.vapor.codes/apt $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/vapor.list
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# install openssl
+RUN apt-get -y install openssl
+
 USER root
 
 RUN apt-get update && apt-get install 

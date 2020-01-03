@@ -1,3 +1,10 @@
+# Based on Skelpo's User Manager Service
+
+### Additional Resources
+- [Tutorial: How to build Web Auth with Session](https://medium.com/@martinlasek/tutorial-how-to-build-web-auth-with-session-f9f64ba49830)
+
+
+---
 # Skelpo User Manager Service
 
 The Skelpo User Service is an application micro-service written using Swift and Vapor, a server side Swift framework. This micro-service can be integrated into most applications to handle the app's users and authentication. It is designed to be easily customizable, whether that is adding additional data points to the user, getting more data with the authentication payload, or creating more routes.

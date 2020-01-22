@@ -2,7 +2,14 @@
 
 ### Additional Resources
 - [Tutorial: How to build Web Auth with Session](https://medium.com/@martinlasek/tutorial-how-to-build-web-auth-with-session-f9f64ba49830)
-
+- [Quickstart: Compose and WordPress](https://docs.docker.com/compose/wordpress/)
+- [Docker Compose and App Deployment with MySQL](https://mysqlrelease.com/2017/11/docker-compose-and-app-deployment-with-mysql/)
+- [Simple example with docker-compose](https://riptutorial.com/mysql/example/15570/simple-example-with-docker-compose)
+- [How to Create a MySql Instance with Docker Compose](https://medium.com/@chrischuck35/how-to-create-a-mysql-instance-with-docker-compose-1598f3cc1bee)
+- [Composing the Stack - Simplify Docker Deployment of MySQL Containers](https://severalnines.com/database-blog/composing-stack-simplify-docker-deployment-mysql-containers)
+- [Integrating a MySQL Docker container with Docker Compose](https://www.atomicwriting.com/2017/10/01/mysql-container-and-docker-compose/)
+- [PostgreSQL vs. MySQL](https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-vs-mysql/)
+- [Tutorial: How to build Web Auth with Session](https://medium.com/@martinlasek/tutorial-how-to-build-web-auth-with-session-f9f64ba49830)
 
 ---
 # Skelpo User Manager Service

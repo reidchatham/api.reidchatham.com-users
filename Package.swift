@@ -12,7 +12,8 @@ let package = Package(
         .package(url: "https://github.com/vapor/vapor.git", from: "3.3.0"),
         .package(url: "https://github.com/vapor/fluent-mysql.git", from: "3.0.1"),
         .package(url: "https://github.com/vapor/jwt.git", from: "3.0.0"),
-        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.0.0"),
+       .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.0.0")),
+        // .package(url: "https://github.com/vapor/crypto.git", from: "3.0.0"),
         .package(url: "https://github.com/vapor-community/sendgrid-provider.git", from: "3.0.6"),
         .package(url: "https://github.com/vapor-community/lingo-vapor.git", from: "3.0.0"),
         .package(url: "https://github.com/skelpo/JWTDataProvider.git", from: "1.0.0"),
@@ -30,4 +31,3 @@ let package = Package(
         .testTarget(name: "AppTests", dependencies: ["App"])
     ]
 )
-

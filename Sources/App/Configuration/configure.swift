@@ -58,8 +58,8 @@ public func configure(
     services.register(middlewares)
     
     /// Register the configured SQLite database to the database config.
-    var databases = DatabasesConfig()
-    let config = MySQLDatabaseConfig(
+
+    let myConfig = MySQLDatabaseConfig(
         hostname: Environment.get("DATABASE_HOSTNAME") ?? "localhost",
         port: Int(Environment.get("DATABASE_PORT") ?? "3306") ?? 3306,
         username: Environment.get("DATABASE_USER") ?? "root",
@@ -67,7 +67,9 @@ public func configure(
         database: Environment.get("DATABASE_DB") ?? "service_users",
         transport: env.isRelease ? .cleartext : .unverifiedTLS
     )
-    let database = MySQLDatabase(config: config)
+
+    var databases = DatabasesConfig()
+    let database = MySQLDatabase(config: myConfig)
     databases.add(database: database, as: .mysql)
     services.register(databases)
     

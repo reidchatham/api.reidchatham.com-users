@@ -1,8 +1,8 @@
-import FluentMySQL
+import FluentPostgreSQL
 import Vapor
 
 /// An attribute for a `User` to store custom data..
-final class Attribute: Content, MySQLModel, Migration, Parameter {
+final class Attribute: Content, PostgreSQLModel, Migration, Parameter {
     static let entity: String = "attributes"
     
     /// The database ID of a class instance.
@@ -32,7 +32,7 @@ final class Attribute: Content, MySQLModel, Migration, Parameter {
 }
 
 extension Attribute {
-    static func prepare(on connection: MySQLDatabase.Connection) -> Future<Void> {
+    static func prepare(on connection: PostgreSQLDatabase.Connection) -> Future<Void> {
         return Database.create(self, on: connection) { builder in
             try addProperties(to: builder)
             builder.reference(from: \.userID, to: \User.id)

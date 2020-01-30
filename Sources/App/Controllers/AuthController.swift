@@ -17,25 +17,28 @@ final class AuthController: RouteCollection {
     }
 
     func boot(router: Router) throws {
+
         let auth = router.grouped("current")
+
+        auth.get("login", use: renderLogin)
+        auth.get("register", use: renderRegister)
+
         auth.post("newPassword", use: newPassword)
         auth.post("accessToken", use: refreshAccessToken)
 
         let protected = auth.grouped(JWTAuthenticatableMiddleware<User>())
-        protected.get("login", use: renderLogin)
-        protected.post("login", use: login)
-        protected.get("status", use: status)
 
+        protected.get("status", use: status)
         if emailConfirmation {
             auth.get("activate", use: activate)
         }
 
+        protected.post("login", use: login)
+
         if openRegistration {
-            auth.get(User.self, at: "register", use: renderRegister)
             auth.post(User.self, at: "register", use: register)
         } else {
             let restricted = auth.grouped(PermissionsMiddleware<Payload>(allowed: [.admin]))
-            restricted.get(User.self, at: "register", use: renderRegister)
             restricted.post(User.self, at: "register", use: register)
         }
 
@@ -194,6 +197,7 @@ final class AuthController: RouteCollection {
 
     ///
     func renderLogin(_ req: Request) throws -> Future<View> {
+        print("renderLogin")
         // render the login view
         return try req.view().render("login")
     }
@@ -202,6 +206,8 @@ final class AuthController: RouteCollection {
     /// The actual authentication is handled by the `JWTAuthenticatableMiddleware`.
     /// The request's body should contain an email and a password for authenticating.
     func login(_ request: Request)throws -> Future<LoginResponse> {
+        print("login")
+
         let user = try request.requireAuthenticated(User.self)
         let userPayload = try Payload(user: user)
 

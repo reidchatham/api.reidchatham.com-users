@@ -5,37 +5,36 @@ services:
       context: .
     image: api.reidchatham.com-users:dev
     environment:
-      DATABASE_HOSTNAME: db
-      DATABASE_PORT: 3306
-      DATABASE_USER: root
-      DATABASE_PASSWORD: test
-      DATABASE_DB: service_users
       SLEEP_LENGTH: 5
+      POSTGRES_HOST: db
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
       JWT_PUBLIC: n-value-from-jwt
       JWT_SECRET: d-value-from-jwt
-      # SENDGRID_API_KEY: add-your-key
-      # EMAIL_FROM: example@email.com
-      # EMAIL_URL: http://localhost:8080/v1/users/activate
-      # EMAIL_CONFIRMATION: on
-      # OPEN_REGISTRATION: on
+      # POSTGRES_PORT: 27017
       EXPOSED_PORT: 443
+    # env_file:
+    #   - ./env/postgres.env
     ports:
       - 443:443
     # volumes:
     #   - ./:/app
     depends_on:
-      - db
+      - "db"
   db:
-    image: mysql:latest
+    image: postgres
     volumes:
      - db_data:/var/lib/mysql
     restart: always
-    ports:
-      - 3306:3306
+    # ports:
+    #   - 5432:5432
+    # env_file:
+    #   - ./env/postgres.env
     environment:
-      MYSQL_ROOT_PASSWORD: test
-      MYSQL_DATABASE: service_users
-      MYSQL_USER: root
-      MYSQL_PASSWORD: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
+
 volumes:
     db_data: {}

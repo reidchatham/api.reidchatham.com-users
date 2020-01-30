@@ -1,7 +1,5 @@
-import App
-import Service
-import Vapor
 import Foundation
+import App
 
 // you should use a proper health-check, but for the demo this is fine
 if

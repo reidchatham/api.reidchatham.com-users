@@ -41,7 +41,7 @@ final class UserController: RouteCollection {
     ///
     /// `JWTAuthenticatableMiddleware<User>()` first to verify
     /// the request and get the user.
-    func profile(_ request: Request)throws -> Future<UserSuccessResponse> {
+    func profile(_ request: Request) throws -> Future<UserSuccessResponse> {
 
         // Get the authenticated user and convert it to a `UserResponse` instance.
         return try request.user().response(on: request, forProfile: true)
@@ -49,7 +49,7 @@ final class UserController: RouteCollection {
 
     /// Updates the authenticates user's `firstname` and
     /// `lastname` properties.
-    func save(_ request: Request, _ content: NewUserBody)throws -> Future<UserSuccessResponse> {
+    func save(_ request: Request, _ content: NewUserBody) throws -> Future<UserSuccessResponse> {
 
         // Get the authenticated user, then updates its properties
         // with the request body data.
@@ -64,12 +64,12 @@ final class UserController: RouteCollection {
 
     /// Gets all the `Attribute` models connected to the
     /// authenticated user.
-    func attributes(_ request: Request)throws -> Future<[Attribute]> {
+    func attributes(_ request: Request) throws -> Future<[Attribute]> {
         return try request.user().attributes(on: request).all()
     }
 
     /// Adds or updates an attribute for the authenticated user.
-    func createAttribute(_ request: Request, _ content: AttributeBody)throws -> Future<UserSuccessResponse> {
+    func createAttribute(_ request: Request, _ content: AttributeBody) throws -> Future<UserSuccessResponse> {
         let user = try request.user()
 
         // Get the attribute with the matching key.
@@ -89,7 +89,7 @@ final class UserController: RouteCollection {
 
     /// Deletes a `User` model, along with its connected attributes.
     /// The authed user that is deleting the other user must be an admin.
-    func delete(_ request: Request)throws -> Future<HTTPStatus> {
+    func delete(_ request: Request) throws -> Future<HTTPStatus> {
 
         // Get the authenticated user.
         let user = try request.user()
@@ -103,7 +103,7 @@ final class UserController: RouteCollection {
 
     /// Deletes an `Attribute` model connected to the authed user,
     /// using either its ID or `key` to find it.
-    func deleteAttributes(_ request: Request)throws -> Future<HTTPStatus> {
+    func deleteAttributes(_ request: Request) throws -> Future<HTTPStatus> {
         let user = try request.user()
         let deleted: Future<Void>
 

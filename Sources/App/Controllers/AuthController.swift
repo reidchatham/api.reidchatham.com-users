@@ -18,10 +18,10 @@ final class AuthController: RouteCollection {
 
     func boot(router: Router) throws {
 
-        let auth = router.grouped("current")
+        let auth = router.grouped("auth")
 
-        auth.get("login", use: renderLogin)
-        auth.get("register", use: renderRegister)
+        // auth.get("login", use: renderLogin)
+        // auth.get("register", use: renderRegister)
 
         auth.post("newPassword", use: newPassword)
         auth.post("accessToken", use: refreshAccessToken)

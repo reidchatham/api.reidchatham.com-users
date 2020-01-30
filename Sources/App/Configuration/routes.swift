@@ -17,24 +17,19 @@ public func routes(
         return "Hello, world!"
     }
 
-    // Example of configuring a controller
-    // let todoController = TodoController()
-    // router.get("todos", use: todoController.index)
-    // router.post("todos", use: todoController.create)
-    // router.delete("todos", Todo.parameter, use: todoController.delete)
 
     let userController = UserControllerRender()
     router.get("register", use: userController.renderRegister)
-    router.post("register", use: userController.register)
+    // router.post("register", use: userController.register)
     router.get("login", use: userController.renderLogin)
 
     let authSessionRouter = router.grouped(User.authSessionsMiddleware())
-    authSessionRouter.post("login", use: userController.login)
+    // authSessionRouter.post("login", use: userController.login)
 
     let protectedRouter = authSessionRouter.grouped(RedirectMiddleware<User>(path: "/login"))
     protectedRouter.get("profile", use: userController.renderProfile)
 
-    router.get("logout", use: userController.logout)
+    // router.get("logout", use: userController.logout)
 
     //-----------------------------------------------------------------------//
 

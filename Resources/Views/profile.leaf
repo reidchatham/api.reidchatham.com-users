@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <h3 class="card-title">Profile</h3>
                         <p>Email: #(user.email)</p>
-                        <a href="/logout" class="btn btn-block btn-danger">
+                        <a href="/users/auth/logout" class="btn btn-block btn-danger">
                             logout
                         </a>
                     </div>

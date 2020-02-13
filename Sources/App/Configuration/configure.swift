@@ -26,7 +26,6 @@ public func configure(
     _ env: inout Environment,
     _ services: inout Services
 ) throws {
-  print("configure")
 
     let jwtProvider = JWTProvider { n, d in
         guard let d = d else { throw Abort(.internalServerError, reason: "Could not find environment variable 'JWT_SECRET'", identifier: "missingEnvVar") }

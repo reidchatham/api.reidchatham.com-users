@@ -1,8 +1,32 @@
 import Vapor
 import FluentSQL
 import Crypto
+import JWTMiddleware
+import Authentication
 
-final class UserControllerRender {
+final class UserControllerRender: RouteCollection {
+
+
+    func boot(router: Router) {
+
+        if openRegistration {
+            router.get("register", use: renderRegister)
+        } else {
+            let restricted = router.grouped(PermissionsMiddleware<Payload>(allowed: [.admin]))
+            restricted.get("register", use: renderRegister)
+        }
+        // router.post("register", use: userController.register)
+        router.get("login", use: renderLogin)
+
+        let authSessionRouter = router.grouped(User.authSessionsMiddleware())
+        // authSessionRouter.post("login", use: userController.login)
+
+        let protectedRouter = authSessionRouter.grouped(RedirectMiddleware<User>(path: "/login"))
+        protectedRouter.get("profile", use: renderProfile)
+
+        router.get("logout", use: logout)
+
+    }
 
     func renderRegister(_ req: Request) throws -> Future<View> {
         return try req.view().render("register")

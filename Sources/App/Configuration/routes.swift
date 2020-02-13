@@ -7,7 +7,6 @@ public func routes(
     _ router: Router,
     _ container: Container
 ) throws {
-  print("set routes")
     // Basic "It works" example
     router.get { req in
         return "It works!"
@@ -18,26 +17,7 @@ public func routes(
         return "Hello, world!"
     }
 
-
-    let userController = UserControllerRender()
-    if openRegistration {
-        router.get("register", use: userController.renderRegister)
-    } else {
-        let restricted = router.grouped(PermissionsMiddleware<Payload>(allowed: [.admin]))
-        restricted.get("register", use: userController.renderRegister)
-    }
-    // router.post("register", use: userController.register)
-    router.get("login", use: userController.renderLogin)
-
-    let authSessionRouter = router.grouped(User.authSessionsMiddleware())
-    // authSessionRouter.post("login", use: userController.login)
-
-    let protectedRouter = authSessionRouter.grouped(RedirectMiddleware<User>(path: "/login"))
-    protectedRouter.get("profile", use: userController.renderProfile)
-
-    router.get("logout", use: userController.logout)
-
-    //-----------------------------------------------------------------------//
+    try router.register(collection: UserControllerRender())
 
 //    let root = router.grouped(any, "users")
     let root = router.grouped("users")

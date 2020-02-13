@@ -1,11 +1,3 @@
-//
-//  User.swift
-//  groups
-//
-//  Created by Ralph Küpper on 7/23/17.
-//
-//
-
 import FluentPostgreSQL
 import Validation
 import Crypto
@@ -14,51 +6,51 @@ import Vapor
 /// A generic user that can be conected to any service that uses JWT for authentication.
 final class User: Content, PostgreSQLModel, Migration, Parameter {
     static let entity: String = "users"
-    
+
     /// The database ID of the class instance.
     var id: Int?
-    
+
     ///
     var firstname: String?
-    
+
     ///
     var lastname: String?
-    
+
     ///
     var email: String
-    
+
     ///
     var password: String
-    
+
     ///
     var language: String
-    
+
     ///
     var emailCode: String?
-    
+
     ///
     var confirmed: Bool
-    
+
     ///
     var permissionLevel: UserStatus
-    
+
     ///
     var deletedAt: Date?
-    
+
     /// Create a user with an email address and a language.
     /// When using this initializer, the user is created with a permission level of 0 and an empty password.
     ///
     /// - parameters:
     ///   - email: The user's email address.
     ///   - language: The user's prefered language for translating the confimation email or any other text with Lingo.
-    init(_ email: String, _ language: String) throws {
+    init(_ email: String, _ language: String = "en-US") throws {
         self.email = email
         self.language = language
         self.password = ""
         self.confirmed = !emailConfirmation
         self.permissionLevel = .standard
     }
-    
+
     /// Create a user with an email, language, first name, last name, password, and email code.
     ///
     /// - Parameters:
@@ -69,20 +61,20 @@ final class User: Content, PostgreSQLModel, Migration, Parameter {
     ///   - password: The user's raw password. The initializer hashes it.
     ///   - emailCode: The email code for confirming the user account.
     /// - Throws: Errors when hashing the password
-    convenience init(_ email: String, _ language: String, _ firstName: String? = nil, _ lastName: String? = nil, _ password: String, _ emailCode: String)throws {
+    convenience init(_ email: String, _ language: String = "en-US", _ firstName: String? = nil, _ lastName: String? = nil, _ password: String, _ emailCode: String? = nil)throws {
         try self.init(email, language)
-        
+
         self.firstname = firstName
         self.lastname = lastName
         self.emailCode = emailCode
         self.password = try BCryptDigest().hash(password)
     }
-    
+
     // We implement a custom decoder so we can have default
     // values for some of the properties.
     init(from decoder: Decoder)throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         self.id = try container.decodeIfPresent(User.ID.self, forKey: .id)
         self.firstname = try container.decodeIfPresent(String.self, forKey: .firstname)
         self.lastname = try container.decodeIfPresent(String.self, forKey: .lastname)
@@ -94,7 +86,7 @@ final class User: Content, PostgreSQLModel, Migration, Parameter {
         self.permissionLevel = try container.decodeIfPresent(UserStatus.self, forKey: .permissionLevel) ?? .standard
         self.deletedAt = try container.decodeIfPresent(Date.self, forKey: .deletedAt)
     }
-    
+
     /// Allows Fluent to set the `deletedAt` property to the value stored in the database.
     /// Allows a `users` row to be temporarily deleted from the database
     /// with the possibility to restore.

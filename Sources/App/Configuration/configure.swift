@@ -11,12 +11,12 @@ import Vapor
 /// Used to check wheather we should send a confirmation email when a user creates an account,
 /// or if they should be auto-confirmed.
 /// - Note: This variable is set through the environment variable "EMAIL_CONFIRMATION" and "on/off" as values.
-var emailConfirmation: Bool = true
+var emailConfirmation: Bool = false
 
 /// The configuration key for wheather user registration is open to the public
 /// or must be executed by an admin user.
 /// - Note: This variable can be set through the environment variable "OPEN_REGISTRATION" and "on/off" as values.
-var openRegistration: Bool = true
+var openRegistration: Bool = false
 
 /// Called before your application initializes.
 ///
@@ -26,6 +26,7 @@ public func configure(
     _ env: inout Environment,
     _ services: inout Services
 ) throws {
+  print("configure")
 
     let jwtProvider = JWTProvider { n, d in
         guard let d = d else { throw Abort(.internalServerError, reason: "Could not find environment variable 'JWT_SECRET'", identifier: "missingEnvVar") }

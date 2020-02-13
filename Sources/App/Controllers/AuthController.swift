@@ -45,11 +45,6 @@ final class AuthController: RouteCollection {
         router.get("logout", use: logout)
     }
 
-    ///
-    func renderRegister(_ req: Request) throws -> Future<View> {
-        return try req.view().render("register")
-    }
-
     /// Creates a new `User` model in the database.
     func register(_ request: Request, _ user: User)throws -> Future<UserSuccessResponse> {
         // Validate the properties of the new user model using custom validations.
@@ -101,54 +96,17 @@ final class AuthController: RouteCollection {
         .response(on: request, forProfile: true)
     }
 
+    ///
+    func renderRegister(_ req: Request) throws -> Future<View> {
+        return try req.view().render("register")
+    }
+
     /// A route handler that checks that status of the user.
     /// This could be used to verifiy if they are authenticated.
     func status(_ request: Request)throws -> Future<UserSuccessResponse> {
 
         // Return the authenticated user.
         return try request.user().response(on: request, forProfile: false)
-    }
-
-     /// A route handler that generates a new password for a user.
-    func newPassword(_ request: Request)throws -> Future<UserSuccessResponse> {
-
-        // Get the email of the user to create a new password for.
-        let email = try request.content.syncGet(String.self, at: "email")
-
-        // Verify a user exists with the given email.
-        let user = User.query(on: request).filter(\.email == email).first().unwrap(or: Abort(.badRequest, reason: "No user found with email '\(email)'."))
-        return user.flatMap(to: (User, String).self) { user in
-
-            // Verifiy that the user has confimed their account.
-            guard user.confirmed else { throw Abort(.badRequest, reason: "User not activated.") }
-
-
-            // Create a new random password from the current date/time
-//            let str = try! Crypto.MD5.hash(Date().description).hexEncodedString()
-            let str = Date().description.md5()
-            let index = str.index(str.startIndex, offsetBy: 8)
-            let password = String(str[..<index])
-
-            user.password = try BCrypt.hash(password)
-            return user.save(on: request).and(result: password)
-        }.flatMap(to: UserSuccessResponse.self) { saved in
-
-            // If there is no API key, just return. This is for testing the service.
-            guard Environment.get("SENDGRID_API_KEY") != nil else { return try saved.0.response(on: request, forProfile: false) }
-
-            let config = try request.make(AppConfig.self)
-
-            // Send a verification email.
-            return try request.send(
-                email: "email.password.text",
-                withSubject: "email.password.title",
-                from: config.emailFrom,
-                to: email,
-                localized:
-                saved.0,
-                interpolations: ["password": saved.1]
-            ).transform(to: saved.0).response(on: request, forProfile: false)
-        }
     }
 
     /// A route handler that returns a new access and refresh token for the user.
@@ -195,18 +153,52 @@ final class AuthController: RouteCollection {
         }.response(on: request, forProfile: false)
     }
 
-    ///
-    func renderLogin(_ req: Request) throws -> Future<View> {
-        print("renderLogin")
-        // render the login view
-        return try req.view().render("login")
+     /// A route handler that generates a new password for a user.
+    func newPassword(_ request: Request)throws -> Future<UserSuccessResponse> {
+
+        // Get the email of the user to create a new password for.
+        let email = try request.content.syncGet(String.self, at: "email")
+
+        // Verify a user exists with the given email.
+        let user = User.query(on: request).filter(\.email == email).first().unwrap(or: Abort(.badRequest, reason: "No user found with email '\(email)'."))
+        return user.flatMap(to: (User, String).self) { user in
+
+            // Verifiy that the user has confimed their account.
+            guard user.confirmed else { throw Abort(.badRequest, reason: "User not activated.") }
+
+
+            // Create a new random password from the current date/time
+//            let str = try! Crypto.MD5.hash(Date().description).hexEncodedString()
+            let str = Date().description.md5()
+            let index = str.index(str.startIndex, offsetBy: 8)
+            let password = String(str[..<index])
+
+            user.password = try BCrypt.hash(password)
+            return user.save(on: request).and(result: password)
+        }.flatMap(to: UserSuccessResponse.self) { saved in
+
+            // If there is no API key, just return. This is for testing the service.
+            guard Environment.get("SENDGRID_API_KEY") != nil else { return try saved.0.response(on: request, forProfile: false) }
+
+            let config = try request.make(AppConfig.self)
+
+            // Send a verification email.
+            return try request.send(
+                email: "email.password.text",
+                withSubject: "email.password.title",
+                from: config.emailFrom,
+                to: email,
+                localized:
+                saved.0,
+                interpolations: ["password": saved.1]
+            ).transform(to: saved.0).response(on: request, forProfile: false)
+        }
     }
 
     /// Authenticates a user with an email and password.
     /// The actual authentication is handled by the `JWTAuthenticatableMiddleware`.
     /// The request's body should contain an email and a password for authenticating.
     func login(_ request: Request)throws -> Future<LoginResponse> {
-        print("login")
 
         let user = try request.requireAuthenticated(User.self)
         let userPayload = try Payload(user: user)
@@ -231,6 +223,12 @@ final class AuthController: RouteCollection {
             let userResponse = UserResponse(user: user, attributes: nil)
             return LoginResponse(accessToken: accessToken, refreshToken: refreshToken, user: userResponse)
         }
+    }
+
+    ///
+    func renderLogin(_ req: Request) throws -> Future<View> {
+        // render the login view
+        return try req.view().render("login")
     }
 
     ///

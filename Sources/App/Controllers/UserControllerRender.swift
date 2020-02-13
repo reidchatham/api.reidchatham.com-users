@@ -59,8 +59,8 @@ final class UserControllerRender {
         return try req.view().render("profile", ["user": user])
     }
 
-    // func logout(_ req: Request) throws -> Future<Response> {
-    //     try req.unauthenticateSession(User.self)
-    //     return Future.map(on: req) { return req.redirect(to: "/login") }
-    // }
+    func logout(_ req: Request) throws -> Future<Response> {
+        try req.unauthenticateSession(User.self)
+        return Future.map(on: req) { return req.redirect(to: "/login") }
+    }
 }

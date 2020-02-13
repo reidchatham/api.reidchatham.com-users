@@ -10,28 +10,22 @@ services:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test
       POSTGRES_DB: test
-      JWT_PUBLIC: n-value-from-jwt
-      JWT_SECRET: d-value-from-jwt
-      # POSTGRES_PORT: 27017
+      JWT_PUBLIC: ${JWT_PUBLIC}
+      JWT_SECRET: ${JWT_SECRET}
+      EMAIL_CONFIRMATION: 'off'
+      OPEN_REGISTRATION: 'on'
+      # SENDGRID_API_KEY:
       EXPOSED_PORT: 443
-    # env_file:
-    #   - ./env/postgres.env
     ports:
       - 443:443
-    # volumes:
-    #   - ./:/app
     depends_on:
       - "db"
-      
+
   db:
     image: postgres:latest
     volumes:
      - db_data:/var/lib/mysql
     restart: always
-    # ports:
-    #   - 5432:5432
-    # env_file:
-    #   - ./env/postgres.env
     environment:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test

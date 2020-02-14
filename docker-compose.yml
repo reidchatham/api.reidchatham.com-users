@@ -5,14 +5,15 @@ services:
       context: .
     image: api.reidchatham.com-users:dev
     environment:
+      JWT_PUBLIC
+      JWT_SECRET
       SLEEP_LENGTH: 5
       POSTGRES_HOST: db
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test
       POSTGRES_DB: test
-      JWT_PUBLIC: n-value-from-jwt
-      JWT_SECRET: d-value-from-jwt
-      # POSTGRES_PORT: 27017
+      EMAIL_CONFIRMATION: 'off'
+      OPEN_REGISTRATION: 'on'
       EXPOSED_PORT: 443
     # env_file:
     #   - ./env/postgres.env

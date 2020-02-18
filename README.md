@@ -11,6 +11,12 @@
 - [PostgreSQL vs. MySQL](https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-vs-mysql/)
 - [Tutorial: How to build Web Auth with Session](https://medium.com/@martinlasek/tutorial-how-to-build-web-auth-with-session-f9f64ba49830)
 
+### Other User MicroService Examples
+- [Typescript - OOTH](https://nmaro.github.io/ooth/)
+- [Scala](https://github.com/faubertin/scala-play-rest-example)
+- [Go](https://github.com/microservices-demo/user)
+- [Python](https://github.com/testdrivenio/flask-microservices-users)
+
 ---
 # Skelpo User Manager Service
 

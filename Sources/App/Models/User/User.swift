@@ -6,13 +6,13 @@
 //
 //
 
-import FluentMySQL
+import FluentPostgreSQL
 import Validation
 import Crypto
 import Vapor
 
 /// A generic user that can be conected to any service that uses JWT for authentication.
-final class User: Content, MySQLModel, Migration, Parameter {
+final class User: Content, PostgreSQLModel, Migration, Parameter {
     static let entity: String = "users"
     
     /// The database ID of the class instance.

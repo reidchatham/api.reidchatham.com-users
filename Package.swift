@@ -1,18 +1,22 @@
 // swift-tools-version:5.0
-
 import PackageDescription
 
 let package = Package(
-    name: "users",
+    name: "api.reidchatham.com-users",
     products: [
-        .library(name: "App", targets: ["App"]),
-        .executable(name: "Run", targets: ["Run"])
+        .library(name: "api.reidchatham.com-users", targets: ["App"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "3.3.0"),
-        .package(url: "https://github.com/vapor/fluent-mysql.git", from: "3.0.1"),
+        // 💧 A server-side Swift web framework.
+        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
+        // 🔵 Swift ORM (queries, models, relations, etc) built on Postgresql.
+        .package(url: "https://github.com/vapor/fluent-postgresql.git", from: "1.0.0"),
+        .package(url: "https://github.com/vapor/leaf.git", from: "3.0.0-rc"),
+        .package(url: "https://github.com/vapor/auth.git", from: "2.0.0-rc"),
+//        .package(url: "https://github.com/vapor/crypto.git", from: "3.0.0"),
+
         .package(url: "https://github.com/vapor/jwt.git", from: "3.0.0"),
-        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.0.0"),
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.0.0")),
         .package(url: "https://github.com/vapor-community/sendgrid-provider.git", from: "3.0.6"),
         .package(url: "https://github.com/vapor-community/lingo-vapor.git", from: "3.0.0"),
         .package(url: "https://github.com/skelpo/JWTDataProvider.git", from: "1.0.0"),
@@ -20,14 +24,20 @@ let package = Package(
         .package(url: "https://github.com/skelpo/SkelpoMiddleware.git", from: "1.4.0")
     ],
     targets: [
-        .target(name: "App", dependencies: ["Vapor", "FluentMySQL", "JWT", "CryptoSwift", "SendGrid", "LingoVapor", "JWTDataProvider", "JWTVapor", "SkelpoMiddleware"],
-                exclude: [
-                    "Config",
-                    "Public",
-                    "Resources",
-                    ]),
+        .target(name: "App",
+                dependencies: [
+                    "Vapor",
+                    "Leaf",
+                    "Authentication",
+                    "FluentPostgreSQL",
+                    "JWT",
+                    "CryptoSwift",
+                    "SendGrid",
+                    "LingoVapor",
+                    "JWTDataProvider",
+                    "JWTVapor",
+                    "SkelpoMiddleware"]),
         .target(name: "Run", dependencies: ["App"]),
         .testTarget(name: "AppTests", dependencies: ["App"])
     ]
 )
-
